@@ -6,10 +6,6 @@ use App\Http\Controllers\API\PassportAuthController;
 use App\Http\Controllers\API\CustomerController;
 
 Route::post('register', [PassportAuthController::class, 'register']);
-  
-// Route::middleware('auth:api')->group(function () {
-//     Route::resource('customers', [CustomerController::class]); 
-// });
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/customers', [CustomerController::class, 'index']);
