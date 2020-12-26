@@ -103,19 +103,19 @@ class CustomerController extends Controller
                     'response' => 'failed',
                     'message' => 'Unauthenticated.'
                 ],
-                'result' => ''
+                'result' => []
             ]);
         }
         
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
         if(is_null($customer)) {
             return response()->json([
                 'status' => [
-                    'code' => 200,
+                    'code' => 400,
                     'response' => 'error',
-                    'message' => 'sorry, no customer found.'
+                    'message' => 'Sorry, customer data not found.'
                 ],
-                'result' => ''
+                'result' => []
             ]);
         } else {
             return response()->json([
@@ -138,7 +138,7 @@ class CustomerController extends Controller
                     'response' => 'failed',
                     'message' => 'Unauthenticated.'
                 ],
-                'result' => ''
+                'result' => []
             ]);
         }
 
@@ -158,7 +158,7 @@ class CustomerController extends Controller
                     'response' => 'failed',
                     'message' => 'please fill required fields.'
                 ],
-                'result' => '',
+                'result' => [],
                 'validation_errors' => $validator->errors()
             ]);
         }
@@ -173,7 +173,7 @@ class CustomerController extends Controller
             'address' => $inputs['address']
         ]);
 
-         if($customer) {
+        if($customer) {
             return response()->json([
                 'status' => [
                     'code' => 201,
@@ -182,16 +182,16 @@ class CustomerController extends Controller
                 ],
                 'result' => $customer
             ]);
-         } else {
+        } else {
             return response()->json([
                 'status' => [
-                    'code' => 400,
+                    'code' => 404,
                     'response' => 'failed',
-                    'message' => 'sorry, update customer data failed.'
+                    'message' => 'Sorry, customer data not found.'
                 ],
                 'result' => []
             ]);
-         }
+        }
     }
 
     public function delete($id)
@@ -213,7 +213,7 @@ class CustomerController extends Controller
         if($customer) {
             return response()->json([
                 'status' => [
-                    'code' => 201,
+                    'code' => 200,
                     'response' => 'success',
                     'message' => 'Customer data deleted successfully.'
                 ],
@@ -222,9 +222,9 @@ class CustomerController extends Controller
         } else {
             return response()->json([
                 'status' => [
-                    'code' => 400,
-                    'response' => 'failed',
-                    'message' => 'Customer data failed to delete.'
+                    'code' => 404,
+                    'response' => 'error',
+                    'message' => 'Sorry, customer data not found.'
                 ],
                 'result' => []
             ]);
