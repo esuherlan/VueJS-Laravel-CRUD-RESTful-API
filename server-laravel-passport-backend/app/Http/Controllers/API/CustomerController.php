@@ -65,7 +65,7 @@ class CustomerController extends Controller
         if($validator->fails()) {
             return response()->json([
                 'status' => [
-                    'code' => 200,
+                    'code' => 400,
                     'response' => 'failed',
                     'message' => 'please fill required fields.'
                 ],
@@ -75,11 +75,18 @@ class CustomerController extends Controller
         }
 
         $inputs = $request->all();
-        $inputs['password'] = bcrypt($inputs['password']);
-        $customer = Customer::create($inputs);
+        $customer = Customer::create([
+            'name' => $inputs['name'],
+            'email' => $inputs['email'],
+            'password' => bcrypt($inputs['password']),
+            'gender' => $inputs['gender'],
+            'is_married' => $inputs['is_married'],
+            'address' => $inputs['address']
+        ]);
+
         return response()->json([
             'status' => [
-                'code' => 200,
+                'code' => 201,
                 'response' => 'success',
                 'message' => 'insert new customer data successfully.'
             ],
@@ -147,7 +154,7 @@ class CustomerController extends Controller
         if($validator->fails()) {
             return response()->json([
                 'status' => [
-                    'code' => 200,
+                    'code' => 400,
                     'response' => 'failed',
                     'message' => 'please fill required fields.'
                 ],
@@ -169,7 +176,7 @@ class CustomerController extends Controller
          if($customer) {
             return response()->json([
                 'status' => [
-                    'code' => 200,
+                    'code' => 201,
                     'response' => 'success',
                     'message' => 'update customer data successfully.'
                 ],
@@ -178,7 +185,7 @@ class CustomerController extends Controller
          } else {
             return response()->json([
                 'status' => [
-                    'code' => 200,
+                    'code' => 400,
                     'response' => 'failed',
                     'message' => 'sorry, update customer data failed.'
                 ],
@@ -196,7 +203,7 @@ class CustomerController extends Controller
                     'response' => 'failed',
                     'message' => 'Unauthenticated.'
                 ],
-                'result' => ''
+                'result' => []
             ]);
         }
         
@@ -206,21 +213,21 @@ class CustomerController extends Controller
         if($customer) {
             return response()->json([
                 'status' => [
-                    'code' => 200,
+                    'code' => 201,
                     'response' => 'success',
                     'message' => 'Customer data deleted successfully.'
                 ],
-                'result' => ''
+                'result' => []
             ]);
-         } else {
+        } else {
             return response()->json([
                 'status' => [
-                    'code' => 200,
+                    'code' => 400,
                     'response' => 'failed',
                     'message' => 'Customer data failed to delete.'
                 ],
-                'result' => ''
+                'result' => []
             ]);
-         }
+        }
     }
 }
